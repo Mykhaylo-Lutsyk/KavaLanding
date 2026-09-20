@@ -1,0 +1,17 @@
+# Operating System files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Python
+__pycache__/
+*.pyc
