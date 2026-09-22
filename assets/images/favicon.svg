@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#24140e" />
+      <stop offset="50%" stop-color="#140b07" />
+      <stop offset="100%" stop-color="#080403" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fae2a6" />
+      <stop offset="40%" stop-color="#d6a45a" />
+      <stop offset="100%" stop-color="#9a6924" />
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e82c33" />
+      <stop offset="100%" stop-color="#a01217" />
+    </linearGradient>
+  </defs>
+
+  <!-- Dark Espresso Background with Golden Border -->
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#bgGrad)" stroke="url(#goldGrad)" stroke-width="2.5" />
+
+  <!-- Steam Ribbons -->
+  <path d="M25 18 C24 14, 28 12, 26 8" fill="none" stroke="url(#goldGrad)" stroke-width="2.2" stroke-linecap="round" opacity="0.9" />
+  <path d="M32 17 C31 13, 35 11, 33 7" fill="none" stroke="url(#goldGrad)" stroke-width="2.4" stroke-linecap="round" opacity="0.95" />
+  <path d="M39 18 C38 14, 42 12, 40 8" fill="none" stroke="url(#goldGrad)" stroke-width="2.2" stroke-linecap="round" opacity="0.9" />
+
+  <!-- Cup Handle -->
+  <path d="M43 27 C50 27, 51 37, 42 39" fill="none" stroke="url(#goldGrad)" stroke-width="3.5" stroke-linecap="round" />
+
+  <!-- Cup Body -->
+  <path d="M17 24 C17 38, 23 44, 32 44 C41 44, 47 38, 47 24 Z" fill="url(#goldGrad)" />
+  
+  <!-- Cup Top Rim & Coffee Surface -->
+  <ellipse cx="32" cy="24" rx="15" ry="3.5" fill="#fdeec8" />
+  <ellipse cx="32" cy="24.5" rx="13.5" ry="2.6" fill="#2d150d" />
+
+  <!-- Saucer Under Cup -->
+  <path d="M13 47 C20 51, 44 51, 51 47" fill="none" stroke="url(#goldGrad)" stroke-width="3.2" stroke-linecap="round" />
+
+  <!-- Swiss Quality Shield Emblem -->
+  <rect x="28" y="29" width="8" height="8" rx="2" fill="url(#redGrad)" stroke="#fae2a6" stroke-width="0.8" />
+  <!-- Swiss White Cross -->
+  <rect x="31" y="30.5" width="2" height="5" rx="0.4" fill="#ffffff" />
+  <rect x="29.5" y="32" width="5" height="2" rx="0.4" fill="#ffffff" />
+</svg>
