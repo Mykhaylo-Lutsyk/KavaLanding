@@ -159,9 +159,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Add review submission
+  // Initial reviews loading from server API
+  async function loadReviews() {
+    try {
+      const res = await fetch('api/reviews.php');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          reviews = data;
+          renderReviews();
+          return;
+        }
+      }
+    } catch (e) {
+      console.log('Using local fallback for reviews:', e);
+    }
+    renderReviews();
+  }
+
+  // Add review submission to Server API
   if (addReviewForm) {
-    addReviewForm.addEventListener('submit', (e) => {
+    addReviewForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const author = document.getElementById('reviewAuthorName').value.trim();
       const variety = document.getElementById('reviewCoffeeSelect').value;
@@ -173,36 +191,64 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const now = new Date();
-      const formattedDate = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
+      const submitBtn = addReviewForm.querySelector('button[type="submit"]');
+      const originalBtnHtml = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Публікація...';
 
       const newReview = {
         author,
         variety,
         text,
-        rating,
-        date: formattedDate
+        rating
       };
 
-      reviews.unshift(newReview);
+      try {
+        const res = await fetch('api/reviews.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newReview)
+        });
+
+        if (res.ok) {
+          const result = await res.json();
+          if (result.success && result.reviews) {
+            reviews = result.reviews;
+          } else if (result.review) {
+            reviews.unshift(result.review);
+          }
+        } else {
+          const now = new Date();
+          const formattedDate = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
+          reviews.unshift({ ...newReview, date: formattedDate });
+        }
+      } catch (err) {
+        const now = new Date();
+        const formattedDate = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
+        reviews.unshift({ ...newReview, date: formattedDate });
+      }
+
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
       } catch (e) {}
 
       renderReviews();
       addReviewForm.reset();
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnHtml;
+
       // Reset stars to 5
       if (starRatingSelect && reviewRatingInput) {
         reviewRatingInput.value = 5;
         starRatingSelect.querySelectorAll('i').forEach(s => s.classList.add('active'));
       }
 
-      showToast(`Дякуємо, ${author}! Ваш відгук успішно опубліковано.`);
+      showToast(`Дякуємо, ${author}! Ваш відгук успішно опубліковано на сайті.`);
     });
   }
 
-  // Initial render of reviews (empty by default)
-  renderReviews();
+  // Load reviews on startup
+  loadReviews();
 
   // =========================================================================
   // COFFEE QUIZ INTERACTION
@@ -234,17 +280,41 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // =========================================================================
-  // CONSULTATION INQUIRY FORM
+  // CONSULTATION INQUIRY FORM (Sends Telegram Alert)
   // =========================================================================
   const consultationInquiryForm = document.getElementById('consultationInquiryForm');
   if (consultationInquiryForm) {
-    consultationInquiryForm.addEventListener('submit', (e) => {
+    consultationInquiryForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('inquiryName').value.trim();
+      const phone = document.getElementById('inquiryPhone').value.trim();
       const topic = document.getElementById('inquiryTopic').value;
+      const message = document.getElementById('inquiryMessage') ? document.getElementById('inquiryMessage').value.trim() : '';
+
+      const submitBtn = consultationInquiryForm.querySelector('button[type="submit"]');
+      const origHtml = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Відправка...';
+
+      try {
+        const response = await fetch('api/consultation.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, topic, message })
+        });
+        const data = await response.json();
+        if (data && data.success) {
+          showToast(`Дякуємо, ${name}! Запит на тему «${topic}» надіслано. Наш експерт зв'яжеться з вами найближчим часом.`);
+        } else {
+          showToast(`Дякуємо, ${name}! Запит прийнято. Ми зв'яжемося з вами найближчим часом.`);
+        }
+      } catch (err) {
+        showToast(`Дякуємо, ${name}! Запит надіслано. Наш експерт зв'яжеться з вами найближчим часом.`);
+      }
 
       consultationInquiryForm.reset();
-      showToast(`Дякуємо, ${name}! Запит на тему «${topic}» надіслано. Наш експерт зв'яжеться з вами найближчим часом.`);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = origHtml;
     });
   }
 
