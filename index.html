@@ -54,7 +54,6 @@
         <li><a href="#rozchynna-kava" class="nav-link">Розчинна кава</a></li>
         <li><a href="#kapucino" class="nav-link">Капучино</a></li>
         <li><a href="#coffee-quiz" class="nav-link">Підбір смаку</a></li>
-        <li><a href="#reviews" class="nav-link">Відгуки</a></li>
         <li><a href="#contact-inquiry" class="nav-link">Контакти</a></li>
       </ul>
 
@@ -405,89 +404,6 @@
     </div>
   </section>
 
-  <!-- =========================================================================
-       REVIEWS SECTION (EMPTY BY DEFAULT WITH FUNCTIONAL ADDING)
-       ========================================================================= -->
-  <section class="reviews-section" id="reviews">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-subtitle">Враження покупців</div>
-        <h2 class="section-title">Відгуки про каву Swisso</h2>
-        <p class="section-desc">
-          Поділіться своїми враженнями від смаку та аромату нашої кави або прочитайте відгуки інших покупців.
-        </p>
-      </div>
-
-      <div class="reviews-layout-grid">
-        <!-- Add Review Form -->
-        <div class="review-form-card">
-          <h3 class="review-form-title">Залишити відгук</h3>
-          <p class="review-form-subtitle">Ваша думка важлива для нас та інших поціновувачів кави</p>
-
-          <form id="addReviewForm">
-            <div class="form-group">
-              <label>Ваша оцінка:</label>
-              <div class="rating-star-select" id="starRatingSelect">
-                <i class="fa-solid fa-star active" data-rating="1"></i>
-                <i class="fa-solid fa-star active" data-rating="2"></i>
-                <i class="fa-solid fa-star active" data-rating="3"></i>
-                <i class="fa-solid fa-star active" data-rating="4"></i>
-                <i class="fa-solid fa-star active" data-rating="5"></i>
-              </div>
-              <input type="hidden" id="reviewRatingInput" value="5">
-            </div>
-
-            <div class="form-group">
-              <label for="reviewAuthorName">Ваше ім'я:</label>
-              <input type="text" id="reviewAuthorName" class="form-control" placeholder="Наприклад: Оксана" required>
-            </div>
-
-            <div class="form-group">
-              <label for="reviewCoffeeSelect">Яку каву ви куштували?</label>
-              <select id="reviewCoffeeSelect" class="form-control">
-                <option value="Swisso Barista (Зернова)">Swisso Barista (Зернова 1 кг)</option>
-                <option value="Swisso Crema (Зернова)">Swisso Crema (Зернова 1 кг)</option>
-                <option value="Swisso Mild (Мелена 500г)">Swisso Mild (Мелена 500 г)</option>
-                <option value="Swisso Reich Rösten (Мелена)">Swisso Reich Rösten (Мелена)</option>
-                <option value="Swisso Barista (Сублімована 200г)">Swisso Barista (Сублімована 200 г)</option>
-                <option value="Swisso Reich Rösten (Сублімована)">Swisso Reich Rösten (Сублімована)</option>
-                <option value="Swisso Cappuccino Amaretto">Swisso Cappuccino Amaretto (1 кг)</option>
-                <option value="Swisso Cappuccino Dubai Schokolade">Swisso Cappuccino Dubai Schokolade</option>
-                <option value="Swisso Cappuccino Gesalzenes Karamell">Swisso Cappuccino Солона карамель</option>
-                <option value="Інший сорт кави">Інший сорт кави</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="reviewCommentText">Ваш відгук:</label>
-              <textarea id="reviewCommentText" class="form-control" placeholder="Опишіть аромат, піну, смак або враження від приготування..." required></textarea>
-            </div>
-
-            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">
-              <i class="fa-solid fa-comment-dots"></i> Опублікувати відгук
-            </button>
-          </form>
-        </div>
-
-        <!-- Reviews Display Column (Empty by default) -->
-        <div class="reviews-display-column">
-          <!-- Empty State Container -->
-          <div class="reviews-empty-box" id="reviewsEmptyBox">
-            <i class="fa-regular fa-comments empty-box-icon"></i>
-            <h4 class="empty-box-title">Поки що немає відгуків</h4>
-            <p class="empty-box-text">
-              Спробували каву Swisso чи капучино? Будьте першим, хто поділиться своєю думкою! Заповніть форму ліворуч, і ваш відгук з'явиться тут.
-            </p>
-          </div>
-
-          <!-- Dynamic Reviews List -->
-          <div class="reviews-list-container" id="reviewsListContainer">
-            <!-- Appended via script.js -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- =========================================================================
        CONTACT / CONSULTATION INQUIRY FORM
@@ -640,7 +556,6 @@
         <h5 class="footer-col-title">Інформація</h5>
         <ul class="footer-links">
           <li><a href="#coffee-quiz">Гід підбору смаку</a></li>
-          <li><a href="#reviews">Відгуки споживачів</a></li>
           <li><a href="#faq">Питання та відповіді</a></li>
           <li><a href="#contact-inquiry">Запитати консультацію</a></li>
         </ul>
