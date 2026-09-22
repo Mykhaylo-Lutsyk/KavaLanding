@@ -184,25 +184,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Initial reviews loading from server API
+  // Initial reviews loading from data/reviews.json (Always works even without PHP)
   async function loadReviews() {
     try {
-      const res = await fetch('api/reviews.php');
+      const res = await fetch('data/reviews.json?t=' + Date.now());
       if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
-          reviews = data;
+        const serverReviews = await res.json();
+        if (Array.isArray(serverReviews) && serverReviews.length > 0) {
+          const localSaved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+          const map = new Map();
+          // Додаємо локальні відгуки користувача
+          localSaved.forEach(r => map.set(r.id || (r.author + r.text), r));
+          // Додаємо спільні відгуки з сервера
+          serverReviews.forEach(r => map.set(r.id || (r.author + r.text), r));
+          reviews = Array.from(map.values());
           renderReviews();
           return;
         }
       }
     } catch (e) {
-      console.log('Using local fallback for reviews:', e);
+      console.log('Using local reviews fallback:', e);
     }
     renderReviews();
   }
 
-  // Add review submission to Server API
+  // Add review submission
   if (addReviewForm) {
     addReviewForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -221,54 +227,41 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Публікація...';
 
+      const now = new Date();
+      const formattedDate = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
+
       const newReview = {
+        id: 'rev_' + Date.now(),
         author,
         variety,
         text,
-        rating
+        rating,
+        date: formattedDate
       };
 
-      try {
-        const res = await fetch('api/reviews.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newReview)
-        });
+      // 1. Одразу додаємо до поточного списку відгуків на сторінці
+      reviews.unshift(newReview);
 
-        if (res.ok) {
-          const result = await res.json();
-          if (result.success && result.reviews) {
-            reviews = result.reviews;
-          } else if (result.review) {
-            reviews.unshift(result.review);
-          }
-        } else {
-          const now = new Date();
-          const formattedDate = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
-          reviews.unshift({ ...newReview, date: formattedDate });
-        }
-      } catch (err) {
-        const now = new Date();
-        const formattedDate = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
-        reviews.unshift({ ...newReview, date: formattedDate });
-      }
-
+      // 2. Зберігаємо локально в браузері
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
+        const localSaved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        localSaved.unshift(newReview);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(localSaved));
       } catch (e) {}
 
+      // 3. Миттєво перерендеримо блок відгуків (відгук одразу видно на сторінці!)
       renderReviews();
       addReviewForm.reset();
       submitBtn.disabled = false;
       submitBtn.innerHTML = originalBtnHtml;
 
-      // Reset stars to 5
+      // Скидаємо зірочки до 5
       if (starRatingSelect && reviewRatingInput) {
         reviewRatingInput.value = 5;
         starRatingSelect.querySelectorAll('i').forEach(s => s.classList.add('active'));
       }
 
-      // Відправляємо сповіщення про новий відгук у Telegram
+      // 4. Відправляємо сповіщення про новий відгук у ваш Telegram
       const starsStr = '⭐'.repeat(rating);
       const tgReviewMsg = `🌟 <b>НОВИЙ ВІДГУК НА САЙТІ!</b>\n\n`
                         + `👤 <b>Автор:</b> ${escapeHtml(author)}\n`
@@ -277,7 +270,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         + `💬 <b>Відгук:</b>\n<i>"${escapeHtml(text)}"</i>`;
       sendTelegramNotification(tgReviewMsg);
 
-      showToast(`Дякуємо, ${author}! Ваш відгук успішно опубліковано на сайті.`);
+      // 5. Також робимо спробу зберегти на сервері
+      fetch('api/reviews.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newReview)
+      }).catch(() => {});
+
+      showToast(`Дякуємо, ${author}! Ваш відгук успішно опубліковано.`);
     });
   }
 
