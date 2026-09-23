@@ -55,40 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // =========================================================================
-  // TELEGRAM NOTIFICATIONS HELPER (Direct Telegram Bot API)
-  // =========================================================================
-  const TG_BOT_TOKEN = '8609509435:AAHk_JTwMB4uAMON3f9IL1ut641J1LfnX-Q';
-  const TG_CHAT_ID = '1095520731';
-
-  async function sendTelegramNotification(text) {
-    try {
-      const response = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: TG_CHAT_ID,
-          text: text,
-          parse_mode: 'HTML'
-        })
-      });
-      const data = await response.json();
-      return data && data.ok;
-    } catch (e) {
-      console.warn('Telegram notification failed:', e);
-      return false;
-    }
-  }
-
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
 
   // =========================================================================
   // COFFEE QUIZ INTERACTION
@@ -136,32 +102,25 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Відправка...';
 
-      const now = new Date();
-      const timeStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      let tgText = `☕ <b>НОВИЙ ЗАПИТ НА КОНСУЛЬТАЦІЮ!</b>\n\n`
-                 + `👤 <b>Ім'я:</b> ${escapeHtml(name)}\n`
-                 + `📞 <b>Телефон:</b> <code>${escapeHtml(phone)}</code>\n`
-                 + `📋 <b>Категорія:</b> ${escapeHtml(topic)}\n`;
-      if (message) {
-        tgText += `💬 <b>Коментар:</b> ${escapeHtml(message)}\n`;
-      }
-      tgText += `\n🕒 <i>Час: ${timeStr} (Сайт bestcoffe.shop)</i>`;
-
-      // 1. Надійна пряма відправка в Telegram
-      await sendTelegramNotification(tgText);
-
-      // 2. Додаткове збереження через серверне API (якщо увімкнено PHP)
       try {
-        fetch('api/consultation.php', {
+        const response = await fetch('api/consultation.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, phone, topic, message })
-        }).catch(() => {});
-      } catch (err) {}
+        });
+        const result = await response.json();
 
-      showToast(`Дякуємо, ${name}! Запит успішно надіслано. Наш експерт зв'яжеться з вами найближчим часом.`);
-      consultationInquiryForm.reset();
+        if (result.success) {
+          showToast(`Дякуємо, ${name}! Запит успішно надіслано. Наш експерт зв'яжеться з вами найближчим часом.`);
+          consultationInquiryForm.reset();
+        } else {
+          showToast(result.error || 'Виникла помилка. Спробуйте ще раз.');
+        }
+      } catch (err) {
+        showToast(`Дякуємо, ${name}! Запит прийнято. Ми зв'яжемося з вами найближчим часом.`);
+        consultationInquiryForm.reset();
+      }
+
       submitBtn.disabled = false;
       submitBtn.innerHTML = origHtml;
     });

@@ -11,7 +11,8 @@
   <meta property="og:title" content="SWISSO KAFFEE — Справжній характер швейцарської кави">
   <meta property="og:description" content="Презентація оригінального асортименту кави Swisso та Himmel: зерно, помел, сублімація, капучино.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/products/beans/swisso_barista_1kg.jpg">
+  <meta property="og:image" content="https://bestcoffe.shop/assets/products/beans/swisso_barista_1kg.jpg">
+  <meta property="og:url" content="https://bestcoffe.shop/">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
@@ -219,8 +220,8 @@
             Повільна термічна обробка розкриває багатий смаковий профіль із нотами чорного шоколаду, карамелізованого горіха та формує щільну, стійку оксамитову пінку Crema.
           </p>
 
-          <div style="margin-top: 28px;">
-            <a href="beans" class="btn-more-products" id="btnBeansMore">
+          <div class="btn-more-wrapper">
+            <a href="beans.html" class="btn-more-products" id="btnBeansMore">
               <span>Детальніше</span>
               <i class="fa-solid fa-arrow-right"></i>
             </a>
@@ -260,8 +261,8 @@
             Універсальний помел дозволяє швидко та чисто готувати улюблену каву в гейзерній мока-кавоварці, джезві, фільтрі або прямим заварюванням у чашці з ніжним квітково-медовим чи шоколадним посмаком.
           </p>
 
-          <div style="margin-top: 28px;">
-            <a href="ground" class="btn-more-products" id="btnGroundMore">
+          <div class="btn-more-wrapper">
+            <a href="ground.html" class="btn-more-products" id="btnGroundMore">
               <span>Детальніше</span>
               <i class="fa-solid fa-arrow-right"></i>
             </a>
@@ -302,8 +303,8 @@
             Золотисті кристали великої фракції миттєво розчиняються без залишку за 5 секунд, утворюючи ароматний, густий напій із благородним шоколадним посмаком.
           </p>
 
-          <div style="margin-top: 28px;">
-            <a href="instant" class="btn-more-products" id="btnInstantMore">
+          <div class="btn-more-wrapper">
+            <a href="instant.html" class="btn-more-products" id="btnInstantMore">
               <span>Детальніше</span>
               <i class="fa-solid fa-arrow-right"></i>
             </a>
@@ -344,8 +345,8 @@
             Широка колекція налічує 14 оригінальних смаків: від трендового шоколадно-фісташкового Dubai Style та мигдалевого Amaretto до солоної карамелі, тірамісу та густого швейцарського питного шоколаду.
           </p>
 
-          <div style="margin-top: 28px;">
-            <a href="cappuccino" class="btn-more-products" id="btnCappuccinoMore">
+          <div class="btn-more-wrapper">
+            <a href="cappuccino.html" class="btn-more-products" id="btnCappuccinoMore">
               <span>Детальніше</span>
               <i class="fa-solid fa-arrow-right"></i>
             </a>
@@ -417,7 +418,7 @@
         <h2 class="inquiry-title">
           Потрібна допомога у виборі або оптові поставки?
         </h2>
-        <p style="color: var(--cream-muted); font-size: 1.05rem;">
+        <p class="inquiry-desc">
           Зв'яжіться з представниками бренду Swisso. Ми надамо детальний опис кожного бленду, 
           розповімо про наявність свіжих партій та умови співпраці для кав'ярень, офісів та роздрібних покупців.
         </p>
@@ -431,7 +432,7 @@
       </div>
 
       <div class="inquiry-form-card">
-        <form id="consultationInquiryForm" style="display: flex; flex-direction: column; gap: 14px;">
+        <form id="consultationInquiryForm" class="inquiry-form-layout">
           <div class="form-group">
             <label for="inquiryName">Ваше ім'я:</label>
             <input type="text" id="inquiryName" class="form-control" placeholder="Олександр" required>
@@ -439,12 +440,13 @@
 
           <div class="form-group">
             <label for="inquiryPhone">Номер телефону:</label>
-            <input type="tel" id="inquiryPhone" class="form-control" placeholder="+38 (0__) ___-__-__" required>
+            <input type="tel" id="inquiryPhone" class="form-control" placeholder="+38 (0__) ___-__-__" pattern="[\+]?[0-9\s\(\)\-]{10,}" title="Введіть коректний номер телефону" required>
           </div>
 
           <div class="form-group">
             <label for="inquiryTopic">Питання або категорія, що цікавить:</label>
             <select id="inquiryTopic" class="form-control">
+              <option value="" disabled selected>Оберіть категорію...</option>
               <option value="Зернова кава для кавомашини">Зернова кава для кавомашини</option>
               <option value="Мелена кава для дому / офісу">Мелена кава для дому / офісу</option>
               <option value="Сублімована розчинна кава">Сублімована розчинна кава</option>
@@ -458,7 +460,7 @@
             <textarea id="inquiryMessage" class="form-control" rows="3" placeholder="Уточніть ваше запитання..."></textarea>
           </div>
 
-          <button type="submit" class="btn-primary" style="width: 100%; margin-top: 6px;">
+          <button type="submit" class="btn-primary btn-submit-full">
             <i class="fa-solid fa-paper-plane"></i> Надіслати запит на консультацію
           </button>
         </form>
@@ -526,7 +528,7 @@
   <footer class="site-footer">
     <div class="container footer-grid">
       <div>
-        <div class="brand-logo-container" style="margin-bottom: 16px;">
+        <div class="brand-logo-container footer-brand">
           <div class="brand-stamp">
             <i class="fa-solid fa-mug-hot brand-stamp-icon"></i>
             <span class="brand-stamp-text">QUALITÄT</span>
@@ -536,7 +538,7 @@
             <span class="brand-title-kaffee">KAFFEE</span>
           </div>
         </div>
-        <p style="font-size: 0.85rem; line-height: 1.6; color: var(--cream-muted);">
+        <p class="footer-desc">
           Офіційна презентація асортименту натуральної кави преміум-класу Swisso Kaffee та Himmel Kaffee. 
           Швейцарські стандарти повільного обсмаження, делікатний помол, сублімація та десертні суміші.
         </p>
@@ -545,10 +547,10 @@
       <div>
         <h5 class="footer-col-title">Розділи каталогу</h5>
         <ul class="footer-links">
-          <li><a href="beans">Зернова кава (Kaffeebohnen)</a></li>
-          <li><a href="ground">Мелена кава (Gemahlen)</a></li>
-          <li><a href="instant">Розчинна кава (Gefriergetrocknet)</a></li>
-          <li><a href="cappuccino">Капучино (Instant-Getränk)</a></li>
+          <li><a href="beans.html">Зернова кава (Kaffeebohnen)</a></li>
+          <li><a href="ground.html">Мелена кава (Gemahlen)</a></li>
+          <li><a href="instant.html">Розчинна кава (Gefriergetrocknet)</a></li>
+          <li><a href="cappuccino.html">Капучино (Instant-Getränk)</a></li>
         </ul>
       </div>
 
@@ -563,16 +565,16 @@
 
       <div>
         <h5 class="footer-col-title">Зв'язок та довідка</h5>
-        <p style="margin-bottom: 8px; font-weight: 700; color: var(--gold-hover);">
+        <p class="footer-phone">
           <i class="fa-solid fa-phone"></i> +38 (0800) 33-44-55
         </p>
-        <p style="margin-bottom: 8px; font-size: 0.85rem;">
+        <p class="footer-contact-item">
           <i class="fa-solid fa-envelope"></i> info@swisso-kaffee.ua
         </p>
-        <p style="margin-bottom: 16px; font-size: 0.85rem;">
+        <p class="footer-contact-item footer-contact-last">
           <i class="fa-solid fa-clock"></i> Пн-Пт: 09:00 - 19:00
         </p>
-        <div style="display: flex; gap: 12px; font-size: 1.2rem; color: var(--swisso-red);">
+        <div class="footer-social-links">
           <a href="#" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
           <a href="#" aria-label="Viber"><i class="fa-brands fa-viber"></i></a>
           <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
@@ -590,7 +592,7 @@
   <!-- Lightbox Modal for Photo Inspection -->
   <div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox(event)">
     <div class="lightbox-content">
-      <button class="lightbox-close-btn" onclick="closeLightbox()">&times;</button>
+      <button class="lightbox-close-btn" onclick="closeLightbox(event)">&times;</button>
       <img src="" alt="" class="lightbox-img" id="lightboxImg">
       <div class="lightbox-caption" id="lightboxCaption"></div>
     </div>

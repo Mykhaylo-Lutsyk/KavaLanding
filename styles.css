@@ -1183,7 +1183,7 @@ textarea.form-control {
   line-height: 1.6;
 }
 .faq-item.active .faq-answer {
-  max-height: 250px;
+  max-height: 500px;
   padding: 0 24px 20px 24px;
 }
 
@@ -1771,4 +1771,66 @@ textarea.form-control {
   }
 }
 
+/* ==========================================================================
+   UTILITY CLASSES (replacing inline styles)
+   ========================================================================== */
+.btn-more-wrapper {
+  margin-top: 28px;
+}
 
+.inquiry-desc {
+  color: var(--cream-muted);
+  font-size: 1.05rem;
+}
+
+.inquiry-form-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.btn-submit-full {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.footer-brand {
+  margin-bottom: 16px;
+}
+
+.footer-desc {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--cream-muted);
+}
+
+.footer-phone {
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: var(--gold-hover);
+}
+
+.footer-contact-item {
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+}
+
+.footer-contact-last {
+  margin-bottom: 16px;
+}
+
+.footer-social-links {
+  display: flex;
+  gap: 12px;
+  font-size: 1.2rem;
+  color: var(--swisso-red);
+}
+
+/* Toast notification mobile fix */
+@media (max-width: 768px) {
+  .toast-notification {
+    left: 12px;
+    right: 12px;
+    max-width: calc(100vw - 24px);
+  }
+}
