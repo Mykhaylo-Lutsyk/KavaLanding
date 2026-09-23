@@ -1,0 +1,6 @@
+# robots.txt for https://bestcoffe.shop/
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://bestcoffe.shop/sitemap.xml
