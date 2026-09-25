@@ -19,3 +19,8 @@ __pycache__/
 # Archives
 *.zip
 *.rar
+
+# Sensitive / Credentials
+api/config.php
+.env
+.env.*

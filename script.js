@@ -1,6 +1,6 @@
 /**
  * SWISSO KAFFEE & HIMMEL KAFFEE — OFFICIAL SHOWCASE SCRIPT
- * Interactive catalog presentation, dynamic reviews with persistence, lightbox, and quiz.
+ * Interactive catalog presentation, lightbox, quiz, and consultation form.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -236,15 +236,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Navbar background change on scroll
+  // Navbar background change on scroll (throttled with rAF)
   const navbar = document.getElementById('navbar');
+  let scrollTicking = false;
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      navbar.style.background = 'rgba(12, 9, 8, 0.98)';
-      navbar.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
-    } else {
-      navbar.style.background = 'rgba(12, 9, 8, 0.92)';
-      navbar.style.boxShadow = 'none';
+    if (!scrollTicking) {
+      requestAnimationFrame(() => {
+        if (window.scrollY > 50) {
+          navbar.style.background = 'rgba(12, 9, 8, 0.98)';
+          navbar.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
+        } else {
+          navbar.style.background = 'rgba(12, 9, 8, 0.92)';
+          navbar.style.boxShadow = 'none';
+        }
+        scrollTicking = false;
+      });
+      scrollTicking = true;
     }
   });
 });
