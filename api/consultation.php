@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: https://bestcoffe.shop');
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
@@ -21,7 +21,7 @@ if (!$data) {
 
 $name = trim($data['name'] ?? '');
 $phone = trim($data['phone'] ?? '');
-$topic = trim($data['topic'] ?? 'Загальна консультація');
+$topic = !empty(trim($data['topic'] ?? '')) ? trim($data['topic']) : 'Загальна консультація';
 $comment = trim($data['message'] ?? $data['comment'] ?? '');
 
 if (empty($name) || empty($phone)) {
@@ -35,12 +35,12 @@ if (empty($name) || empty($phone)) {
 // Формуємо гарне повідомлення для Telegram
 $dateStr = date('d.m.Y H:i');
 $telegramText = "☕ <b>НОВИЙ ЗАПИТ НА КОНСУЛЬТАЦІЮ!</b>\n\n"
-              . "👤 <b>Ім'я:</b> " . htmlspecialchars($name) . "\n"
-              . "📞 <b>Телефон:</b> " . htmlspecialchars($phone) . "\n"
-              . "📋 <b>Категорія:</b> " . htmlspecialchars($topic) . "\n";
+              . "👤 <b>Ім'я:</b> " . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . "\n"
+              . "📞 <b>Телефон:</b> <code>" . htmlspecialchars($phone, ENT_QUOTES, 'UTF-8') . "</code>\n"
+              . "📋 <b>Категорія:</b> " . htmlspecialchars($topic, ENT_QUOTES, 'UTF-8') . "\n";
 
 if (!empty($comment)) {
-    $telegramText .= "💬 <b>Коментар:</b>\n" . htmlspecialchars($comment) . "\n";
+    $telegramText .= "💬 <b>Коментар:</b>\n" . htmlspecialchars($comment, ENT_QUOTES, 'UTF-8') . "\n";
 }
 
 $telegramText .= "\n🕒 <i>Час: {$dateStr} (Сайт bestcoffe.shop)</i>";
@@ -49,7 +49,7 @@ $telegramText .= "\n🕒 <i>Час: {$dateStr} (Сайт bestcoffe.shop)</i>";
 $sendResult = sendTelegramMessage($telegramText);
 
 echo json_encode([
-    'success' => true,
-    'message' => 'Запит успішно надіслано!',
+    'success' => ($sendResult !== false),
+    'message' => ($sendResult !== false) ? 'Запит успішно надіслано!' : 'Помилка надсилання в Telegram.',
     'telegram_sent' => ($sendResult !== false)
 ], JSON_UNESCAPED_UNICODE);

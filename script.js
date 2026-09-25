@@ -88,37 +88,102 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================================================
   // CONSULTATION INQUIRY FORM (Sends Telegram Alert)
   // =========================================================================
+  const TG_BOT_TOKEN = '8609509435:AAHk_JTwMB4uAMON3f9IL1ut641J1LfnX-Q';
+  const TG_CHAT_ID = '1095520731';
+
+  function escapeTgHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  async function sendTelegramDirect(text) {
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TG_CHAT_ID,
+          text: text,
+          parse_mode: 'HTML'
+        })
+      });
+      const data = await res.json();
+      return !!(data && data.ok);
+    } catch (e) {
+      console.warn('Direct Telegram send error:', e);
+      return false;
+    }
+  }
+
+  async function sendViaBackend(payload) {
+    try {
+      const response = await fetch('api/consultation.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        // Сервер повертає не JSON (статичний хостинг без PHP)
+        return null;
+      }
+      return await response.json();
+    } catch (err) {
+      return null;
+    }
+  }
+
   const consultationInquiryForm = document.getElementById('consultationInquiryForm');
   if (consultationInquiryForm) {
     consultationInquiryForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('inquiryName').value.trim();
       const phone = document.getElementById('inquiryPhone').value.trim();
-      const topic = document.getElementById('inquiryTopic').value;
+      const topicSelect = document.getElementById('inquiryTopic');
+      const topic = (topicSelect && topicSelect.value) ? topicSelect.value : 'Загальна консультація / Допомога у виборі';
       const message = document.getElementById('inquiryMessage') ? document.getElementById('inquiryMessage').value.trim() : '';
+
+      if (!name || !phone) {
+        showToast("Будь ласка, вкажіть ваше ім'я та номер телефону.");
+        return;
+      }
 
       const submitBtn = consultationInquiryForm.querySelector('button[type="submit"]');
       const origHtml = submitBtn.innerHTML;
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Відправка...';
 
-      try {
-        const response = await fetch('api/consultation.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, phone, topic, message })
-        });
-        const result = await response.json();
+      const now = new Date();
+      const timeStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-        if (result.success) {
-          showToast(`Дякуємо, ${name}! Запит успішно надіслано. Наш експерт зв'яжеться з вами найближчим часом.`);
-          consultationInquiryForm.reset();
-        } else {
-          showToast(result.error || 'Виникла помилка. Спробуйте ще раз.');
-        }
-      } catch (err) {
-        showToast(`Дякуємо, ${name}! Запит прийнято. Ми зв'яжемося з вами найближчим часом.`);
+      let tgText = `☕ <b>НОВИЙ ЗАПИТ НА КОНСУЛЬТАЦІЮ!</b>\n\n`
+                 + `👤 <b>Ім'я:</b> ${escapeTgHtml(name)}\n`
+                 + `📞 <b>Телефон:</b> <code>${escapeTgHtml(phone)}</code>\n`
+                 + `📋 <b>Категорія:</b> ${escapeTgHtml(topic)}\n`;
+      if (message) {
+        tgText += `💬 <b>Коментар:</b>\n<i>${escapeTgHtml(message)}</i>\n`;
+      }
+      tgText += `\n🕒 <i>Час: ${timeStr} (Сайт bestcoffe.shop)</i>`;
+
+      let isSuccess = false;
+
+      // Спроба 1: відправка через серверний PHP API (якщо хостинг підтримує PHP)
+      const backendResult = await sendViaBackend({ name, phone, topic, message });
+      if (backendResult && backendResult.success) {
+        isSuccess = true;
+      } else {
+        // Спроба 2: пряма надійна відправка в Telegram через Bot API (для статичного сервера nginx / GitHub Pages)
+        isSuccess = await sendTelegramDirect(tgText);
+      }
+
+      if (isSuccess) {
+        showToast(`Дякуємо, ${name}! Запит успішно надіслано. Наш експерт зв'яжеться з вами найближчим часом.`);
         consultationInquiryForm.reset();
+      } else {
+        showToast('Не вдалося надіслати запит. Будь ласка, перевірте зв\'язок або зателефонуйте нам за номером у контактах.');
       }
 
       submitBtn.disabled = false;
