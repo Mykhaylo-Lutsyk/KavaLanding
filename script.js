@@ -110,18 +110,77 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // =========================================================================
-  // CONSULTATION INQUIRY FORM (Submits asynchronously to /api/consultation.php)
+  // CONSULTATION INQUIRY FORM (Dual-tier: Backend PHP + Telegram Bot API)
   // =========================================================================
+  const TG_BOT_TOKEN = '8609509435:AAGV9zfpfg54n7J8xH4Go_XxOk0lMyXDNm4';
+  const TG_CHAT_ID = '1095520731';
+
+  function escapeTgHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  async function sendTelegramDirect(name, phone, topic, message) {
+    try {
+      const now = new Date();
+      const timeStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      let tgText = `☕ <b>НОВИЙ ЗАПИТ НА КОНСУЛЬТАЦІЮ!</b>\n\n`
+                 + `👤 <b>Ім'я:</b> ${escapeTgHtml(name)}\n`
+                 + `📞 <b>Телефон:</b> <code>${escapeTgHtml(phone)}</code>\n`
+                 + `📋 <b>Категорія:</b> ${escapeTgHtml(topic)}\n`;
+      if (message) {
+        tgText += `💬 <b>Коментар:</b>\n<i>${escapeTgHtml(message)}</i>\n`;
+      }
+      tgText += `\n🕒 <i>Час: ${timeStr} (Сайт bestcoffe.shop)</i>`;
+
+      const res = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TG_CHAT_ID,
+          text: tgText,
+          parse_mode: 'HTML'
+        })
+      });
+      const data = await res.json();
+      return !!(data && data.ok);
+    } catch (e) {
+      console.warn('Direct Telegram send error:', e);
+      return false;
+    }
+  }
+
+  async function sendViaBackend(payload) {
+    try {
+      const response = await fetch('api/consultation.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        return null;
+      }
+      return await response.json();
+    } catch (err) {
+      return null;
+    }
+  }
+
   const inquiryForms = document.querySelectorAll('form.inquiry-form-layout, #consultationInquiryForm');
 
   inquiryForms.forEach(form => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const nameInput = form.querySelector('[name="name"], #inquiryName');
-      const phoneInput = form.querySelector('[name="phone"], #inquiryPhone');
-      const topicInput = form.querySelector('[name="topic"], #inquiryTopic');
-      const messageInput = form.querySelector('[name="message"], #inquiryMessage');
+      const nameInput = form.querySelector('[name="name"], #inquiryName, input[type="text"]');
+      const phoneInput = form.querySelector('[name="phone"], #inquiryPhone, input[type="tel"]');
+      const topicInput = form.querySelector('[name="topic"], #inquiryTopic, select');
+      const messageInput = form.querySelector('[name="message"], #inquiryMessage, textarea');
 
       const name = nameInput ? nameInput.value.trim() : '';
       const phone = phoneInput ? phoneInput.value.trim() : '';
@@ -134,35 +193,31 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const submitBtn = form.querySelector('button[type="submit"]');
-      const origHtml = submitBtn.innerHTML;
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Відправка...';
+      const origHtml = submitBtn ? submitBtn.innerHTML : 'Надіслати';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Відправка...';
+      }
 
-      try {
-        const response = await fetch('api/consultation.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, phone, topic, message })
-        });
+      let isSuccess = false;
 
-        const contentType = response.headers.get('content-type') || '';
-        if (contentType.includes('application/json')) {
-          const data = await response.json();
-          if (data && data.success) {
-            showSuccessModal(name);
-            form.reset();
-          } else {
-            const errorMsg = (data && data.error) ? data.error : 'Не вдалося надіслати запит. Будь ласка, зателефонуйте нам: +38 (0800) 33-55-77.';
-            showToast(errorMsg);
-          }
-        } else {
-          // Якщо сервер не повернув JSON
-          showToast('Помилка сервера. Будь ласка, зв\'яжіться з нами за телефоном: +38 (0800) 33-55-77.');
-        }
-      } catch (err) {
-        console.error('Consultation submission error:', err);
-        showToast('Помилка з\'єднання. Будь ласка, перевірте інтернет або зателефонуйте: +38 (0800) 33-55-77.');
-      } finally {
+      // Спроба 1: відправка через серверний PHP API (/api/consultation.php)
+      const backendResult = await sendViaBackend({ name, phone, topic, message });
+      if (backendResult && backendResult.success) {
+        isSuccess = true;
+      } else {
+        // Спроба 2: пряма надійна відправка в Telegram через Bot API
+        isSuccess = await sendTelegramDirect(name, phone, topic, message);
+      }
+
+      if (isSuccess) {
+        showSuccessModal(name);
+        form.reset();
+      } else {
+        showToast('Не вдалося надіслати запит. Будь ласка, перевірте зв\'язок або зателефонуйте нам: +38 (0800) 33-55-77.');
+      }
+
+      if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = origHtml;
       }

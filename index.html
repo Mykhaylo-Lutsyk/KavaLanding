@@ -513,17 +513,17 @@
         <form id="consultationInquiryForm" class="inquiry-form-layout">
           <div class="form-group">
             <label for="inquiryName">Ваше ім'я:</label>
-            <input type="text" id="inquiryName" class="form-control" placeholder="Олександр" required>
+            <input type="text" id="inquiryName" name="name" class="form-control" placeholder="Олександр" required>
           </div>
 
           <div class="form-group">
             <label for="inquiryPhone">Номер телефону:</label>
-            <input type="tel" id="inquiryPhone" class="form-control" placeholder="+38 (0__) ___-__-__" pattern="[\+]?[0-9\s\(\)\-]{10,}" title="Введіть коректний номер телефону" required>
+            <input type="tel" id="inquiryPhone" name="phone" class="form-control" placeholder="+38 (0__) ___-__-__" pattern="[\+]?[0-9\s\(\)\-]{7,25}" title="Введіть коректний номер телефону" required>
           </div>
 
           <div class="form-group">
             <label for="inquiryTopic">Питання або категорія, що цікавить:</label>
-            <select id="inquiryTopic" class="form-control">
+            <select id="inquiryTopic" name="topic" class="form-control">
               <option value="" disabled selected>Оберіть категорію...</option>
               <option value="Зернова кава для кавомашини">Зернова кава для кавомашини</option>
               <option value="Мелена кава для дому / офісу">Мелена кава для дому / офісу</option>
@@ -535,7 +535,7 @@
 
           <div class="form-group">
             <label for="inquiryMessage">Коментар (опціонально):</label>
-            <textarea id="inquiryMessage" class="form-control" rows="3" placeholder="Уточніть ваше запитання..."></textarea>
+            <textarea id="inquiryMessage" name="message" class="form-control" rows="3" placeholder="Уточніть ваше запитання..."></textarea>
           </div>
 
           <button type="submit" class="btn-primary btn-submit-full">
