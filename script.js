@@ -110,63 +110,26 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // =========================================================================
-  // CONSULTATION INQUIRY FORM (Dual-tier: Backend PHP + Telegram Bot API)
+  // CONSULTATION INQUIRY FORM (Backend PHP → Telegram Bot)
+  // Токен Telegram зберігається виключно на сервері в api/config.php
   // =========================================================================
-  const TG_BOT_TOKEN = '8609509435:AAGV9zfpfg54n7J8xH4Go_XxOk0lMyXDNm4';
-  const TG_CHAT_ID = '1095520731';
-
-  function escapeTgHtml(str) {
-    if (!str) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-  }
-
-  async function sendTelegramDirect(name, phone, topic, message) {
-    try {
-      const now = new Date();
-      const timeStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      let tgText = `☕ <b>НОВИЙ ЗАПИТ НА КОНСУЛЬТАЦІЮ!</b>\n\n`
-                 + `👤 <b>Ім'я:</b> ${escapeTgHtml(name)}\n`
-                 + `📞 <b>Телефон:</b> <code>${escapeTgHtml(phone)}</code>\n`
-                 + `📋 <b>Категорія:</b> ${escapeTgHtml(topic)}\n`;
-      if (message) {
-        tgText += `💬 <b>Коментар:</b>\n<i>${escapeTgHtml(message)}</i>\n`;
-      }
-      tgText += `\n🕒 <i>Час: ${timeStr} (Сайт bestcoffe.shop)</i>`;
-
-      const res = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: TG_CHAT_ID,
-          text: tgText,
-          parse_mode: 'HTML'
-        })
-      });
-      const data = await res.json();
-      return !!(data && data.ok);
-    } catch (e) {
-      console.warn('Direct Telegram send error:', e);
-      return false;
-    }
-  }
 
   async function sendViaBackend(payload) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
     try {
       const response = await fetch('api/consultation.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
       const contentType = response.headers.get('content-type') || '';
-      if (!contentType.includes('application/json')) {
-        return null;
-      }
+      if (!contentType.includes('application/json')) return null;
       return await response.json();
     } catch (err) {
+      clearTimeout(timeoutId);
       return null;
     }
   }
@@ -192,6 +155,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      // Regex-валідація формату телефону
+      const phoneRegex = /^[\+]?[\d\s\(\)\-]{7,25}$/;
+      if (!phoneRegex.test(phone)) {
+        showToast('Введіть коректний номер телефону (наприклад: +38 (050) 123-45-67).');
+        if (phoneInput) phoneInput.focus();
+        return;
+      }
+
       const submitBtn = form.querySelector('button[type="submit"]');
       const origHtml = submitBtn ? submitBtn.innerHTML : 'Надіслати';
       if (submitBtn) {
@@ -201,13 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let isSuccess = false;
 
-      // Спроба 1: відправка через серверний PHP API (/api/consultation.php)
+      // Відправка через серверний PHP API (/api/consultation.php)
+      // Токен Telegram зберігається виключно на сервері
       const backendResult = await sendViaBackend({ name, phone, topic, message });
       if (backendResult && backendResult.success) {
         isSuccess = true;
-      } else {
-        // Спроба 2: пряма надійна відправка в Telegram через Bot API
-        isSuccess = await sendTelegramDirect(name, phone, topic, message);
       }
 
       if (isSuccess) {

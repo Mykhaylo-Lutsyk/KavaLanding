@@ -1,0 +1,24 @@
+# ============================================================
+# /api/.htaccess — Захист API директорії bestcoffe.shop
+# ============================================================
+
+# 1. Забороняємо перегляд списку файлів директорії
+Options -Indexes
+
+# 2. Блокуємо прямий HTTP-доступ до конфігураційних файлів
+<FilesMatch "(config\.php|config\.example\.php|\.env|\.env\..*|.*\.log|.*\.bak|.*\.sql)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# 3. Для consultation.php — дозволяємо тільки POST та OPTIONS
+<Files "consultation.php">
+    Order Allow,Deny
+    Allow from all
+    <LimitExcept POST OPTIONS>
+        Deny from all
+    </LimitExcept>
+</Files>
+
+# 4. Встановлюємо charset за замовчуванням
+AddDefaultCharset UTF-8
