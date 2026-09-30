@@ -682,6 +682,22 @@
     <span class="toast-msg" id="toastMessage">Повідомлення</span>
   </div>
 
+  <!-- Success Confirmation Modal (AGENT_RULES Rule 2) -->
+  <div class="success-modal-backdrop" id="successModal" onclick="closeSuccessModal(event)">
+    <div class="success-modal-card">
+      <div class="success-icon-badge">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h3 class="success-modal-title">Запит успішно надіслано!</h3>
+      <p class="success-modal-desc" id="successModalDesc">
+        Дякуємо! Ваш запит на консультацію отримано. Наш експерт зв'яжеться з вами протягом 15 хвилин.
+      </p>
+      <button type="button" class="btn-success-close" onclick="closeSuccessModal()">
+        Зрозуміло
+      </button>
+    </div>
+  </div>
+
   <!-- Custom Script -->
   <script src="script.js"></script>
 </body>

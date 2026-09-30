@@ -137,7 +137,7 @@
   <!-- Main Navigation -->
   <header class="navbar" id="navbar">
     <div class="container nav-container">
-      <a href="/" class="brand-logo-container" aria-label="Swisso Kaffee Головна">
+      <a href="index.html" class="brand-logo-container" aria-label="Swisso Kaffee Головна">
         <div class="brand-stamp">
           <i class="fa-solid fa-mug-hot brand-stamp-icon"></i>
           <span class="brand-stamp-text">QUALITÄT</span>
@@ -150,18 +150,18 @@
 
       <!-- Desktop Navigation Links -->
       <ul class="nav-links" id="navLinks">
-        <li><a href="/" class="nav-link"><i class="fa-solid fa-house"></i> Головна</a></li>
-        <li><a href="beans" class="nav-link active" style="color: var(--gold-primary);">Зернова кава</a></li>
-        <li><a href="ground" class="nav-link">Мелена кава</a></li>
-        <li><a href="instant" class="nav-link">Розчинна кава</a></li>
-        <li><a href="cappuccino" class="nav-link">Капучино</a></li>
-        <li><a href="/#coffee-quiz" class="nav-link">Підбір смаку</a></li>
-        <li><a href="/#contact-inquiry" class="nav-link">Контакти</a></li>
+        <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Головна</a></li>
+        <li><a href="beans.html" class="nav-link active" style="color: var(--gold-primary);">Зернова кава</a></li>
+        <li><a href="ground.html" class="nav-link">Мелена кава</a></li>
+        <li><a href="instant.html" class="nav-link">Розчинна кава</a></li>
+        <li><a href="cappuccino.html" class="nav-link">Капучино</a></li>
+        <li><a href="index.html#coffee-quiz" class="nav-link">Підбір смаку</a></li>
+        <li><a href="#contact-inquiry" class="nav-link">Контакти</a></li>
       </ul>
 
       <!-- Contact CTA in header -->
       <div class="nav-actions">
-        <a href="/" class="btn-back-home">
+        <a href="index.html" class="btn-back-home">
           <i class="fa-solid fa-arrow-left"></i>
           <span>На головну</span>
         </a>
@@ -365,9 +365,75 @@
 
       <!-- Back to main page button -->
       <div style="text-align: center; margin: 40px 0;">
-        <a href="/#zernova-kava" class="btn-primary" style="display: inline-flex; align-items: center; gap: 10px;">
+        <a href="index.html#zernova-kava" class="btn-primary" style="display: inline-flex; align-items: center; gap: 10px;">
           <i class="fa-solid fa-arrow-left"></i> Повернутися до головного каталогу Swisso
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       CONSULTATION & ORDER INQUIRY (AGENT_RULES Rule 2)
+       ========================================================================= -->
+  <section class="contact-inquiry-section" id="contact-inquiry">
+    <div class="container contact-inquiry-container">
+      <div class="inquiry-info-card">
+        <div class="inquiry-badge">
+          <i class="fa-solid fa-headset"></i> Консультація та замовлення
+        </div>
+        <h2 class="inquiry-title">Бажаєте підібрати ідеальну зернову каву?</h2>
+        <p class="inquiry-desc">
+          Залиште контакти, і наш сертифікований бариста допоможе обрати сорт, купаж або ступінь обсмаження саме під вашу кавомашину чи кав'ярню.
+        </p>
+
+        <div class="inquiry-advantages">
+          <div class="adv-item">
+            <i class="fa-solid fa-truck-fast"></i>
+            <span>Швидка відправка в день замовлення по всій Україні</span>
+          </div>
+          <div class="adv-item">
+            <i class="fa-solid fa-certificate"></i>
+            <span>100% оригінальний сертифікований імпорт із Швейцарії</span>
+          </div>
+          <div class="adv-item">
+            <i class="fa-solid fa-percent"></i>
+            <span>Спеціальні оптові умови для HoReCa та офісів</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="inquiry-form-card">
+        <form class="inquiry-form-layout" id="consultationInquiryForm">
+          <div class="form-group">
+            <label for="inquiryName">Ваше ім'я:</label>
+            <input type="text" id="inquiryName" name="name" class="form-control" placeholder="Олександр" required>
+          </div>
+
+          <div class="form-group">
+            <label for="inquiryPhone">Номер телефону:</label>
+            <input type="tel" id="inquiryPhone" name="phone" class="form-control" placeholder="+38 (0__) ___-__-__" pattern="[\+]?[0-9\s\(\)\-]{10,}" title="Введіть коректний номер телефону" required>
+          </div>
+
+          <div class="form-group">
+            <label for="inquiryTopic">Категорія інтересу:</label>
+            <select id="inquiryTopic" name="topic" class="form-control">
+              <option value="Зернова кава для кавомашини" selected>Зернова кава для кавомашини</option>
+              <option value="Мелена кава для дому / офісу">Мелена кава для дому / офісу</option>
+              <option value="Сублімована розчинна кава">Сублімована розчинна кава</option>
+              <option value="Капучино та десертні напої">Капучино та десертні напої (1 кг)</option>
+              <option value="Оптове замовлення / Співпраця">Оптове замовлення / Співпраця</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="inquiryMessage">Коментар (опціонально):</label>
+            <textarea id="inquiryMessage" name="message" class="form-control" rows="3" placeholder="Уточніть ваше запитання або бажані позиції..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary btn-submit-full">
+            <i class="fa-solid fa-paper-plane"></i> Надіслати запит на консультацію
+          </button>
+        </form>
       </div>
     </div>
   </section>
@@ -385,6 +451,22 @@
   <div class="toast-notification" id="toastNotification">
     <i class="fa-solid fa-circle-check"></i>
     <span id="toastMessage">Повідомлення</span>
+  </div>
+
+  <!-- Success Confirmation Modal (AGENT_RULES Rule 2) -->
+  <div class="success-modal-backdrop" id="successModal" onclick="closeSuccessModal(event)">
+    <div class="success-modal-card">
+      <div class="success-icon-badge">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h3 class="success-modal-title">Запит успішно надіслано!</h3>
+      <p class="success-modal-desc" id="successModalDesc">
+        Дякуємо! Ваш запит на консультацію отримано. Наш експерт зв'яжеться з вами протягом 15 хвилин.
+      </p>
+      <button type="button" class="btn-success-close" onclick="closeSuccessModal()">
+        Зрозуміло
+      </button>
+    </div>
   </div>
 
   <!-- Footer -->
@@ -410,19 +492,19 @@
       <div class="footer-col">
         <h4 class="footer-col-title">Каталог продукції</h4>
         <ul class="footer-nav-list">
-          <li><a href="beans">Зернова кава (Bohnen)</a></li>
-          <li><a href="ground">Мелена кава (Gemahlen)</a></li>
-          <li><a href="instant">Розчинна сублімована</a></li>
-          <li><a href="cappuccino">Капучино та напої (14 смаків)</a></li>
+          <li><a href="beans.html">Зернова кава (Bohnen)</a></li>
+          <li><a href="ground.html">Мелена кава (Gemahlen)</a></li>
+          <li><a href="instant.html">Розчинна сублімована</a></li>
+          <li><a href="cappuccino.html">Капучино та напої (14 смаків)</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
         <h4 class="footer-col-title">Навігація</h4>
         <ul class="footer-nav-list">
-          <li><a href="/">Головна сторінка</a></li>
-          <li><a href="/#coffee-quiz">Підбір кави (Quiz)</a></li>
-          <li><a href="/#contact-inquiry">Замовити консультацію</a></li>
+          <li><a href="index.html">Головна сторінка</a></li>
+          <li><a href="index.html#coffee-quiz">Підбір кави (Quiz)</a></li>
+          <li><a href="#contact-inquiry">Замовити консультацію</a></li>
         </ul>
       </div>
 
