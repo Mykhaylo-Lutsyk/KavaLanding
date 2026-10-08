@@ -246,19 +246,21 @@ document.addEventListener('DOMContentLoaded', () => {
   // Navbar background change on scroll (throttled with rAF)
   const navbar = document.getElementById('navbar');
   let scrollTicking = false;
-  window.addEventListener('scroll', () => {
-    if (!scrollTicking) {
-      requestAnimationFrame(() => {
-        if (window.scrollY > 50) {
-          navbar.style.background = 'rgba(12, 9, 8, 0.98)';
-          navbar.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
-        } else {
-          navbar.style.background = 'rgba(12, 9, 8, 0.92)';
-          navbar.style.boxShadow = 'none';
-        }
-        scrollTicking = false;
-      });
-      scrollTicking = true;
-    }
-  });
+  if (navbar) {
+    window.addEventListener('scroll', () => {
+      if (!scrollTicking) {
+        requestAnimationFrame(() => {
+          if (window.scrollY > 50) {
+            navbar.style.background = 'rgba(255, 255, 255, 0.96)';
+            navbar.style.boxShadow = '0 8px 30px rgba(60, 40, 25, 0.08)';
+          } else {
+            navbar.style.background = 'rgba(251, 249, 246, 0.94)';
+            navbar.style.boxShadow = '0 2px 14px rgba(60, 40, 25, 0.04)';
+          }
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    });
+  }
 });
