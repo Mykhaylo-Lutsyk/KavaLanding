@@ -262,10 +262,20 @@ document.addEventListener('DOMContentLoaded', () => {
             navbar.style.background = 'rgba(251, 249, 246, 0.94)';
             navbar.style.boxShadow = '0 2px 14px rgba(60, 40, 25, 0.04)';
           }
+          // Scroll to top button visibility
+          const btnScrollTop = document.getElementById('btnScrollTop');
+          if (btnScrollTop) {
+            if (window.scrollY > 400) {
+              btnScrollTop.classList.add('visible');
+            } else {
+              btnScrollTop.classList.remove('visible');
+            }
+          }
+
           scrollTicking = false;
         });
         scrollTicking = true;
       }
-    });
+    }, { passive: true });
   }
 });

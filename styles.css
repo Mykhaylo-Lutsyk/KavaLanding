@@ -1850,3 +1850,105 @@ textarea.form-control {
     max-width: calc(100vw - 24px);
   }
 }
+
+/* ==========================================================================
+   FLOATING ACTION BUTTONS (Scroll-to-top & Quick Consultation)
+   ========================================================================== */
+.floating-actions-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 990;
+  pointer-events: none;
+}
+
+.btn-scroll-top,
+.btn-floating-contact {
+  pointer-events: auto;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.btn-scroll-top {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  color: var(--cream-light);
+  border: 1px solid var(--border-glass);
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px);
+}
+
+.btn-scroll-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.btn-scroll-top:hover {
+  background: var(--gold-primary);
+  color: #fff;
+  border-color: var(--gold-primary);
+  transform: translateY(-2px);
+}
+
+.btn-floating-contact {
+  height: 48px;
+  padding: 0 18px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--swisso-red) 0%, var(--swisso-red-dark) 100%);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  animation: pulseFloating 3s infinite;
+}
+
+.btn-floating-contact:hover {
+  transform: scale(1.04);
+  box-shadow: 0 8px 25px var(--shadow-red);
+}
+
+@keyframes pulseFloating {
+  0%, 100% {
+    box-shadow: 0 4px 16px rgba(166, 33, 38, 0.3);
+  }
+  50% {
+    box-shadow: 0 6px 24px rgba(166, 33, 38, 0.55);
+  }
+}
+
+@media (max-width: 576px) {
+  .floating-actions-container {
+    bottom: 16px;
+    right: 16px;
+    gap: 8px;
+  }
+  .btn-floating-contact .floating-contact-label {
+    display: none;
+  }
+  .btn-floating-contact {
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  .btn-scroll-top {
+    width: 42px;
+    height: 42px;
+  }
+}
