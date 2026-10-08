@@ -7,16 +7,25 @@ Options -Indexes
 
 # 2. Блокуємо прямий HTTP-доступ до конфігураційних файлів
 <FilesMatch "(config\.php|config\.example\.php|\.env|\.env\..*|.*\.log|.*\.bak|.*\.sql)$">
-    Order Allow,Deny
-    Deny from all
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Allow,Deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
 
 # 3. Для consultation.php — дозволяємо тільки POST та OPTIONS
 <Files "consultation.php">
-    Order Allow,Deny
-    Allow from all
     <LimitExcept POST OPTIONS>
-        Deny from all
+        <IfModule mod_authz_core.c>
+            Require all denied
+        </IfModule>
+        <IfModule !mod_authz_core.c>
+            Order Allow,Deny
+            Deny from all
+        </IfModule>
     </LimitExcept>
 </Files>
 

@@ -144,11 +144,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const phoneInput = form.querySelector('[name="phone"], #inquiryPhone, input[type="tel"]');
       const topicInput = form.querySelector('[name="topic"], #inquiryTopic, select');
       const messageInput = form.querySelector('[name="message"], #inquiryMessage, textarea');
+      const honeypotInput = form.querySelector('[name="website"]');
 
       const name = nameInput ? nameInput.value.trim() : '';
       const phone = phoneInput ? phoneInput.value.trim() : '';
       const topic = (topicInput && topicInput.value) ? topicInput.value : 'Загальна консультація / Допомога у виборі';
       const message = messageInput ? messageInput.value.trim() : '';
+      const website = honeypotInput ? honeypotInput.value.trim() : '';
 
       if (!name || !phone) {
         showToast("Будь ласка, вкажіть ваше ім'я та номер телефону.");
@@ -174,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Відправка через серверний PHP API (/api/consultation.php)
       // Токен Telegram зберігається виключно на сервері
-      const backendResult = await sendViaBackend({ name, phone, topic, message });
+      const backendResult = await sendViaBackend({ name, phone, topic, message, website });
       if (backendResult && backendResult.success) {
         isSuccess = true;
       }
@@ -183,7 +185,10 @@ document.addEventListener('DOMContentLoaded', () => {
         showSuccessModal(name);
         form.reset();
       } else {
-        showToast('Не вдалося надіслати запит. Будь ласка, перевірте зв\'язок або зателефонуйте нам: +38 (0800) 33-55-77.');
+        const errorMsg = (backendResult && backendResult.error)
+          ? backendResult.error
+          : 'Не вдалося надіслати запит. Будь ласка, перевірте зв\'язок або зателефонуйте нам: +38 (0800) 33-55-77.';
+        showToast(errorMsg);
       }
 
       if (submitBtn) {
