@@ -73,13 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (quizResultBox) quizResultBox.style.display = 'block';
 
       if (answer === 'beans') {
-        quizResultText.innerHTML = `Вам найкраще підійде <strong>Swisso Barista 100% Arabica</strong> або <strong>Swisso Crema</strong> — цільні зерна для розкриття максимального багатства свіжої кави!`;
+        quizResultText.innerHTML = `Nejlépe se vám hodí <strong>Swisso Barista 100% Arabica</strong> nebo <strong>Swisso Crema</strong> — celá zrna pro odhalení maximálního bohatství čerstvé kávy!`;
         if (quizScrollBtn) quizScrollBtn.setAttribute('href', '#zernova-kava');
       } else if (answer === 'ground') {
-        quizResultText.innerHTML = `Ваш ідеальний вибір — <strong>Swisso Mild Gemahlen (500г)</strong>: досконалий помел для гейзера або турки з ніжними квітково-медовими нотками.`;
+        quizResultText.innerHTML = `Vaše ideální volba je <strong>Swisso Mild Gemahlen (500 g)</strong>: dokonalé mletí pro moka konvičku nebo džezvu s jemnými květinově-medovými tóny.`;
         if (quizScrollBtn) quizScrollBtn.setAttribute('href', '#melena-kava');
       } else if (answer === 'instant') {
-        quizResultText.innerHTML = `Рекомендуємо спробувати <strong>Swisso Barista Gefriergetrocknet (200г)</strong> або наше фірмове <strong>Cappuccino Amaretto чи Dubai Schokolade (1 кг)</strong>!`;
+        quizResultText.innerHTML = `Doporučujeme vyzkoušet <strong>Swisso Barista Gefriergetrocknet (200 g)</strong> nebo naše speciality <strong>Cappuccino Amaretto či Dubai Schokolade (1 kg)</strong>!`;
         if (quizScrollBtn) quizScrollBtn.setAttribute('href', '#kapucino');
       }
     });
@@ -94,11 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function showSuccessModal(name) {
     if (successModal) {
       if (successModalDesc) {
-        successModalDesc.textContent = `Дякуємо, ${name || 'шановний клієнте'}! Ваш запит успішно отримано. Наш експерт зв'яжеться з вами протягом 15 хвилин для надання консультації.`;
+        successModalDesc.textContent = `Děkujeme, ${name || 'vážený zákazníku'}! Váš požadavek byl úspěšně přijat. Náš specialista vás bude kontaktovat do 15 minut.`;
       }
       successModal.classList.add('active');
     } else {
-      showToast(`Дякуємо, ${name}! Запит успішно надіслано. Наш експерт зв'яжеться з вами найближчим часом.`);
+      showToast(`Děkujeme, ${name}! Požadavek byl úspěšně odeslán. Náš specialista vás bude brzy kontaktovat.`);
     }
   }
 
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // =========================================================================
   // CONSULTATION INQUIRY FORM (Backend PHP → Telegram Bot)
-  // Токен Telegram зберігається виключно на сервері в api/config.php
+  // Token Telegramu je bezpečně uložen výhradně na serveru v api/config.php
   // =========================================================================
 
   async function sendViaBackend(payload) {
@@ -148,41 +148,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const name = nameInput ? nameInput.value.trim() : '';
       const phone = phoneInput ? phoneInput.value.trim() : '';
-      const topic = (topicInput && topicInput.value) ? topicInput.value : 'Загальна консультація / Допомога у виборі';
+      const topic = (topicInput && topicInput.value) ? topicInput.value : 'Všeobecná konzultace / Pomoc s výběrem';
       const message = messageInput ? messageInput.value.trim() : '';
       const website = honeypotInput ? honeypotInput.value.trim() : '';
 
       if (!name || !phone) {
-        showToast("Будь ласка, вкажіть ваше ім'я та номер телефону.");
+        showToast("Prosím, uveďte své jméno a telefonní číslo.");
         return;
       }
 
-      // Regex-валідація формату телефону
+      // Regex validace formátu telefonu
       const phoneRegex = /^[\+]?[\d\s\(\)\-]{7,25}$/;
       if (!phoneRegex.test(phone)) {
-        showToast('Введіть коректний номер телефону (наприклад: +38 (050) 123-45-67).');
+        showToast('Zadejte platné telefonní číslo (například: +420 777 123 456).');
         if (phoneInput) phoneInput.focus();
         return;
       }
 
       const submitBtn = form.querySelector('button[type="submit"]');
-      const origHtml = submitBtn ? submitBtn.innerHTML : 'Надіслати';
+      const origHtml = submitBtn ? submitBtn.innerHTML : 'Odeslat';
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Відправка...';
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Odesílání...';
       }
 
       let isSuccess = false;
 
-      // Відправка через серверний PHP API (/api/consultation.php)
-      // Токен Telegram зберігається виключно на сервері
+      // Odeslání přes serverové PHP API (/api/consultation.php)
       const backendResult = await sendViaBackend({ name, phone, topic, message, website });
       if (backendResult && backendResult.success) {
         isSuccess = true;
       }
 
       if (isSuccess) {
-        // Відстеження конверсії в Google Analytics 4 (подія генерації ліда)
+        // Měření konverzí v Google Analytics 4 (událost generate_lead)
         if (typeof gtag === 'function') {
           gtag('event', 'generate_lead', {
             event_category: 'consultation_form',
@@ -195,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         const errorMsg = (backendResult && backendResult.error)
           ? backendResult.error
-          : 'Не вдалося надіслати запит. Будь ласка, перевірте зв\'язок або зателефонуйте нам: +38 (0800) 33-55-77.';
+          : 'Nepodařilo se odeslat požadavek. Zkontrolujte prosím připojení nebo nám zavolejte: +420 800 334 455.';
         showToast(errorMsg);
       }
 
@@ -232,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.openLightbox = function(src, caption) {
     if (!lightboxModal || !lightboxImg) return;
     lightboxImg.src = src;
-    lightboxImg.alt = caption || 'Фото продукції Swisso Kaffee';
+    lightboxImg.alt = caption || 'Fotografie produktů Swisso Kaffee';
     if (lightboxCaption) lightboxCaption.textContent = caption || '';
     lightboxModal.classList.add('active');
   };

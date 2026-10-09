@@ -1,19 +1,19 @@
 <?php
 /**
  * SWISSO KAFFEE — Consultation Inquiry Endpoint
- * Приймає форму консультації та надсилає повідомлення в Telegram.
+ * Zpracovává formulář konzultace a odesílá zprávu do Telegramu.
  *
- * Захист: Rate limiting, Origin-перевірка, honeypot, display_errors=off
+ * Ochrana: Rate limiting, Origin kontrola, honeypot, display_errors=off
  */
 
-// ── Безпека: приховати помилки від користувача ──
+// ── Bezpečnost: skrýt chyby před uživatelem ──
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
 header('Content-Type: application/json; charset=utf-8');
 
-// ── CORS: дозволяємо тільки наш домен ──
+// ── CORS: povolit pouze naši doménu ──
 $allowedOrigins = ['https://bestcoffe.shop', 'https://www.bestcoffe.shop', 'http://localhost:8085'];
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if (in_array($origin, $allowedOrigins, true)) {
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// ── Перевірка методу: тільки POST ──
+// ── Kontrola metody: pouze POST ──
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode([
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// ── Перевірка Origin (захист від CSRF із чужих доменів) ──
+// ── Kontrola Origin (ochrana před CSRF) ──
 if (!empty($origin) && !in_array($origin, $allowedOrigins, true)) {
     http_response_code(403);
     echo json_encode([
@@ -50,7 +50,7 @@ if (!empty($origin) && !in_array($origin, $allowedOrigins, true)) {
     exit;
 }
 
-// ── Rate Limiting (файловий, для shared-хостингу) ──
+// ── Rate Limiting (souborový, pro hosting) ──
 $rateLimitDir = sys_get_temp_dir() . '/swisso_rate_limit/';
 if (!is_dir($rateLimitDir)) {
     @mkdir($rateLimitDir, 0700, true);
@@ -58,15 +58,15 @@ if (!is_dir($rateLimitDir)) {
 
 $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 $rateLimitFile = $rateLimitDir . md5($clientIp) . '.json';
-$maxRequests = 3;       // максимум запитів
-$windowSeconds = 300;   // за 5 хвилин
+$maxRequests = 3;       // maximum požadavků
+$windowSeconds = 300;   // za 5 minut
 
 if (file_exists($rateLimitFile)) {
     $rateData = json_decode(file_get_contents($rateLimitFile), true);
     if (!is_array($rateData) || !isset($rateData['attempts'])) {
         $rateData = ['attempts' => []];
     }
-    // Видаляємо застарілі спроби
+    // Odstranění starých pokusů
     $rateData['attempts'] = array_values(array_filter(
         $rateData['attempts'],
         fn($ts) => $ts > (time() - $windowSeconds)
@@ -76,7 +76,7 @@ if (file_exists($rateLimitFile)) {
         http_response_code(429);
         echo json_encode([
             'success' => false,
-            'error' => 'Забагато запитів. Спробуйте через кілька хвилин.'
+            'error' => 'Příliš mnoho požadavků. Zkuste to prosím za několik minut.'
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -87,10 +87,10 @@ if (file_exists($rateLimitFile)) {
 $rateData['attempts'][] = time();
 file_put_contents($rateLimitFile, json_encode($rateData), LOCK_EX);
 
-// ── Підключення конфігурації Telegram ──
+// ── Připojení konfigurace Telegramu ──
 require_once __DIR__ . '/config.php';
 
-// ── Отримуємо дані (JSON або звичайний POST) ──
+// ── Získání dat (JSON nebo POST) ──
 $rawInput = file_get_contents('php://input');
 $data = json_decode($rawInput, true);
 
@@ -98,9 +98,9 @@ if (!$data) {
     $data = $_POST;
 }
 
-// ── Honeypot-перевірка (поле "website" має бути порожнім) ──
+// ── Honeypot kontrola (pole "website" musí být prázdné) ──
 if (!empty(trim($data['website'] ?? ''))) {
-    // Бот заповнив honeypot — тихо відкидаємо
+    // Bot vyplnil honeypot — tiše zahodit
     echo json_encode([
         'success' => true,
         'message' => 'OK'
@@ -110,44 +110,44 @@ if (!empty(trim($data['website'] ?? ''))) {
 
 $name = trim($data['name'] ?? '');
 $phone = trim($data['phone'] ?? '');
-$topic = !empty(trim($data['topic'] ?? '')) ? trim($data['topic']) : 'Загальна консультація';
+$topic = !empty(trim($data['topic'] ?? '')) ? trim($data['topic']) : 'Všeobecná konzultace';
 $comment = trim($data['message'] ?? $data['comment'] ?? '');
 
 if (empty($name) || empty($phone)) {
     echo json_encode([
         'success' => false,
-        'error' => 'Будь ласка, вкажіть ім\'я та номер телефону.'
+        'error' => 'Prosím, uveďte své jméno a telefonní číslo.'
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
-// ── Серверна валідація телефону ──
+// ── Serverová validace telefonu ──
 if (!preg_match('/^[\+]?[\d\s\(\)\-]{7,25}$/', $phone)) {
     echo json_encode([
         'success' => false,
-        'error' => 'Введіть коректний номер телефону.'
+        'error' => 'Zadejte platné telefonní číslo.'
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
-// ── Формуємо гарне повідомлення для Telegram ──
+// ── Formátování zprávy pro Telegram ──
 $dateStr = date('d.m.Y H:i');
-$telegramText = "☕ <b>НОВИЙ ЗАПИТ НА КОНСУЛЬТАЦІЮ!</b>\n\n"
-              . "👤 <b>Ім'я:</b> " . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . "\n"
-              . "📞 <b>Телефон:</b> <code>" . htmlspecialchars($phone, ENT_QUOTES, 'UTF-8') . "</code>\n"
-              . "📋 <b>Категорія:</b> " . htmlspecialchars($topic, ENT_QUOTES, 'UTF-8') . "\n";
+$telegramText = "☕ <b>NOVÝ POŽADAVEK NA KONZULTACI!</b>\n\n"
+              . "👤 <b>Jméno:</b> " . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . "\n"
+              . "📞 <b>Telefon:</b> <code>" . htmlspecialchars($phone, ENT_QUOTES, 'UTF-8') . "</code>\n"
+              . "📋 <b>Kategorie:</b> " . htmlspecialchars($topic, ENT_QUOTES, 'UTF-8') . "\n";
 
 if (!empty($comment)) {
-    $telegramText .= "💬 <b>Коментар:</b>\n" . htmlspecialchars($comment, ENT_QUOTES, 'UTF-8') . "\n";
+    $telegramText .= "💬 <b>Komentář:</b>\n" . htmlspecialchars($comment, ENT_QUOTES, 'UTF-8') . "\n";
 }
 
-$telegramText .= "\n🕒 <i>Час: {$dateStr} (Сайт bestcoffe.shop)</i>";
+$telegramText .= "\n🕒 <i>Čas: {$dateStr} (Web bestcoffe.shop)</i>";
 
-// ── Відправляємо в Telegram ──
+// ── Odeslání do Telegramu ──
 $sendResult = sendTelegramMessage($telegramText);
 
 echo json_encode([
     'success' => ($sendResult !== false),
-    'message' => ($sendResult !== false) ? 'Запит успішно надіслано!' : 'Помилка надсилання в Telegram.',
+    'message' => ($sendResult !== false) ? 'Požadavek byl úspěšně odeslán!' : 'Chyba při odesílání do Telegramu.',
     'telegram_sent' => ($sendResult !== false)
 ], JSON_UNESCAPED_UNICODE);
