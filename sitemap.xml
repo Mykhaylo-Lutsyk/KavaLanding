@@ -1,33 +1,190 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://bestcoffe.shop/</loc>
     <lastmod>2026-10-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/beans/swisso_barista_1kg.jpg</image:loc>
+      <image:title>Зернова кава SWISSO KAFFEE Barista 100% Arabica 1 кг</image:title>
+      <image:caption>Оригінальна пачка кави Swisso Barista 1kg швейцарського повільного обсмаження</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/ground/swisso_mild_500g.jpg</image:loc>
+      <image:title>Мелена кава SWISSO KAFFEE Mild 500 г</image:title>
+      <image:caption>Швейцарська мелена кава каліброваного помелу у вакуумному брикеті</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/instant/swisso_barista_jar_200g.jpg</image:loc>
+      <image:title>Розчинна сублімована кава SWISSO KAFFEE Barista 200 г</image:title>
+      <image:caption>Натуральна сублімована кава Freeze-Dried у фірмовій скляній банці</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_amaretto_1kg.jpg</image:loc>
+      <image:title>Капучино SWISSO KAFFEE Amaretto 1 кг</image:title>
+      <image:caption>Швейцарська десертна суміш швидкого приготування з густою вершковою пінкою</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://bestcoffe.shop/beans.html</loc>
     <lastmod>2026-10-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/beans/swisso_barista_1kg.jpg</image:loc>
+      <image:title>Swisso Barista 1 кг (Зернова кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/beans/swisso_crema_1kg.jpg</image:loc>
+      <image:title>Swisso Crema 1 кг (Зернова кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/beans/swisso_espresso_1kg.jpg</image:loc>
+      <image:title>Swisso Espresso 1 кг (Зернова кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/beans/swisso_reich_rosten_1kg.jpg</image:loc>
+      <image:title>Swisso Reich Rösten 1 кг (Зернова кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/beans/swisso_reich_rosten_500g.jpg</image:loc>
+      <image:title>Swisso Reich Rösten 500 г (Зернова кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/beans/himmel_crema_500g.jpg</image:loc>
+      <image:title>Himmel Crema 500 г (Зернова кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/beans/himmel_espresso_500g.jpg</image:loc>
+      <image:title>Himmel Espresso 500 г (Зернова кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/beans/himmel_klassisch_1kg.jpg</image:loc>
+      <image:title>Himmel Klassisch 1 кг (Зернова кава)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://bestcoffe.shop/ground.html</loc>
     <lastmod>2026-10-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/ground/swisso_mild_500g.jpg</image:loc>
+      <image:title>Swisso Mild 500 г (Мелена кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/ground/swisso_reich_rosten_250g.jpg</image:loc>
+      <image:title>Swisso Reich Rösten 250 г (Мелена кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/ground/swisso_reich_rosten_500g.jpg</image:loc>
+      <image:title>Swisso Reich Rösten 500 г (Мелена кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/ground/himmel_platin_250g.jpg</image:loc>
+      <image:title>Himmel Platin 250 г (Мелена кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/ground/himmel_platin_500g.jpg</image:loc>
+      <image:title>Himmel Platin 500 г (Мелена кава)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://bestcoffe.shop/instant.html</loc>
     <lastmod>2026-10-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/instant/swisso_barista_jar_200g.jpg</image:loc>
+      <image:title>Swisso Barista 200 г Скло (Розчинна сублімована кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/instant/swisso_reich_rosten_jar_200g.jpg</image:loc>
+      <image:title>Swisso Reich Rösten 200 г Скло (Розчинна сублімована кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/instant/swisso_reich_rosten_jar_100g.jpg</image:loc>
+      <image:title>Swisso Reich Rösten 100 г Скло (Розчинна сублімована кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/instant/swisso_reich_rosten_jar_50g.jpg</image:loc>
+      <image:title>Swisso Reich Rösten 50 г Скло (Розчинна сублімована кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/instant/swisso_reich_rosten_pouch_120g.jpg</image:loc>
+      <image:title>Swisso Reich Rösten 120 г Дой-пак (Розчинна сублімована кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/instant/himmel_gold_jar_100g.jpg</image:loc>
+      <image:title>Himmel Gold 100 г Скло (Розчинна сублімована кава)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/instant/himmel_gold_jar_200g.jpg</image:loc>
+      <image:title>Himmel Gold 200 г Скло (Розчинна сублімована кава)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://bestcoffe.shop/cappuccino.html</loc>
     <lastmod>2026-10-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_dubai_1kg.jpg</image:loc>
+      <image:title>Swisso Cappuccino Dubai Style Schokolade 1 кг</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_amaretto_1kg.jpg</image:loc>
+      <image:title>Swisso Cappuccino Amaretto 1 кг</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_salted_caramel_1kg.jpg</image:loc>
+      <image:title>Swisso Cappuccino Gesalzenes Karamell 1 кг</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_pistachio_1kg.jpg</image:loc>
+      <image:title>Swisso Cappuccino Pistazie 1 кг</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_irish_cream_1kg.jpg</image:loc>
+      <image:title>Swisso Cappuccino Irish Cream 1 кг</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_tiramisu_1kg.jpg</image:loc>
+      <image:title>Swisso Cappuccino Tiramisu 1 кг</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_vanilla_1kg.jpg</image:loc>
+      <image:title>Swisso Cappuccino Vanille 1 кг</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_kakaonote_1kg.jpg</image:loc>
+      <image:title>Swisso Cappuccino Kakaonote 1 кг</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_white_1kg.jpg</image:loc>
+      <image:title>Swisso Cappuccino White 1 кг</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_wiener_melange_1kg.jpg</image:loc>
+      <image:title>Swisso Cappuccino Wiener Melange 1 кг</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_trink_schokolade_1kg.jpg</image:loc>
+      <image:title>Swisso Trink-Schokolade 1 кг</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_creamer_200g.jpg</image:loc>
+      <image:title>Swisso Creamer 200 г</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_caramel_1kg.jpg</image:loc>
+      <image:title>Swisso Cappuccino Karamell 1 кг</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://bestcoffe.shop/assets/products/cappuccino/swisso_cappuccino_hazelnut_1kg.jpg</image:loc>
+      <image:title>Swisso Cappuccino Haselnuss 1 кг</image:title>
+    </image:image>
   </url>
 </urlset>
