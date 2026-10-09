@@ -182,6 +182,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (isSuccess) {
+        // Відстеження конверсії в Google Analytics 4 (подія генерації ліда)
+        if (typeof gtag === 'function') {
+          gtag('event', 'generate_lead', {
+            event_category: 'consultation_form',
+            event_label: topic,
+            lead_topic: topic
+          });
+        }
         showSuccessModal(name);
         form.reset();
       } else {
