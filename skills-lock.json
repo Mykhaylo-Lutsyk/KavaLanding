@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "computedHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf"
+    },
+    "landing-page-conversion-audit": {
+      "source": "autonnel/autonnel-skills",
+      "sourceType": "github",
+      "skillPath": "landing-page-conversion-audit/SKILL.md",
+      "computedHash": "2ad7ffa8e37354acab4d2d9c5f27a327ef6d24787392589f4969edf1162d6ea5"
+    },
+    "seo-audit": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/seo-audit/SKILL.md",
+      "computedHash": "f321ae6d6959fcad4a9f65db8eb1548b981e3e85cb541050f94703ebacc6d39d"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "f3bc47f890f42a44db1007ab390709ec368e4b8c089baee6b0007182236ac474"
+    },
+    "web-quality-audit": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-quality-audit/SKILL.md",
+      "computedHash": "10c0b018ce77d2c6dd17aecf1ab58a64abb2beee945354d83c4ba8883527120a"
+    }
+  }
+}

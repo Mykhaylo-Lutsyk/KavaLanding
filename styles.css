@@ -91,9 +91,55 @@ a {
 button {
   cursor: pointer;
   border: none;
-  outline: none;
   font-family: inherit;
   transition: all var(--transition-normal);
+}
+
+/* Accessibility: Visible Focus Indicators (WCAG AA & Vercel Guidelines) */
+:focus-visible {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 3px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
+}
+
+/* Skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  top: -999px;
+  left: 20px;
+  background: var(--swisso-red);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  z-index: 10000;
+  font-weight: 700;
+  box-shadow: var(--shadow-lg);
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 20px;
+  outline: 3px solid var(--gold-primary);
+  outline-offset: 2px;
+}
+
+/* Anchor target offset for fixed navbar */
+.hero-section,
+.category-section,
+.quiz-section,
+.contact-inquiry-section,
+.faq-section {
+  scroll-margin-top: 85px;
 }
 
 .container {
@@ -1791,6 +1837,46 @@ textarea.form-control {
    ========================================================================== */
 .btn-more-wrapper {
   margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btn-inquiry-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 22px;
+  border-radius: var(--radius-full);
+  background: rgba(184, 115, 51, 0.08);
+  color: var(--gold-primary);
+  border: 1px solid var(--border-subtle);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all var(--transition-fast);
+}
+
+.btn-inquiry-inline:hover {
+  background: var(--gold-primary);
+  color: #ffffff;
+  border-color: var(--gold-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-trust-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--cream-dark);
+  margin-top: 10px;
+}
+
+.form-trust-hint i {
+  color: #27ae60;
 }
 
 .inquiry-desc {
@@ -2001,4 +2087,15 @@ textarea.form-control {
   font-weight: 600;
   margin-left: 2px;
 }
+
+/* Accessibility: Honor User Motion Preferences (WCAG AA & Vercel Guidelines) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 

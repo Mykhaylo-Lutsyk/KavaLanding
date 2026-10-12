@@ -30,10 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (mobileMenuToggle && navLinks) {
     mobileMenuToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('mobile-active');
+      const isExpanded = navLinks.classList.toggle('mobile-active');
+      mobileMenuToggle.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
       const icon = mobileMenuToggle.querySelector('i');
       if (icon) {
-        if (navLinks.classList.contains('mobile-active')) {
+        if (isExpanded) {
           icon.classList.remove('fa-bars');
           icon.classList.add('fa-xmark');
         } else {
@@ -46,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navLinks.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         navLinks.classList.remove('mobile-active');
+        mobileMenuToggle.setAttribute('aria-expanded', 'false');
         const icon = mobileMenuToggle.querySelector('i');
         if (icon) {
           icon.classList.remove('fa-xmark');
@@ -57,30 +59,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =========================================================================
-  // COFFEE QUIZ INTERACTION
+  // COFFEE QUIZ INTERACTION (Click & Keyboard Accessible)
   // =========================================================================
   const quizOptionCards = document.querySelectorAll('.quiz-option-card');
   const quizResultBox = document.getElementById('quizResultBox');
   const quizResultText = document.getElementById('quizResultText');
   const quizScrollBtn = document.getElementById('quizScrollBtn');
 
+  function handleQuizSelect(card) {
+    quizOptionCards.forEach(c => {
+      c.classList.remove('selected');
+      c.setAttribute('aria-pressed', 'false');
+    });
+    card.classList.add('selected');
+    card.setAttribute('aria-pressed', 'true');
+
+    const answer = card.getAttribute('data-answer');
+    if (quizResultBox) quizResultBox.style.display = 'block';
+
+    if (answer === 'beans') {
+      quizResultText.innerHTML = `Nejlépe se vám hodí <strong>Swisso Barista 100% Arabica</strong> nebo <strong>Swisso Crema</strong> — celá zrna pro odhalení maximálního bohatství čerstvé kávy!`;
+      if (quizScrollBtn) quizScrollBtn.setAttribute('href', '#zernova-kava');
+    } else if (answer === 'ground') {
+      quizResultText.innerHTML = `Vaše ideální volba je <strong>Swisso Mild Gemahlen (500 g)</strong>: dokonalé mletí pro moka konvičku nebo džezvu s jemnými květinově-medovými tóny.`;
+      if (quizScrollBtn) quizScrollBtn.setAttribute('href', '#melena-kava');
+    } else if (answer === 'instant') {
+      quizResultText.innerHTML = `Doporučujeme vyzkoušet <strong>Swisso Barista Gefriergetrocknet (200 g)</strong> nebo naše speciality <strong>Cappuccino Amaretto či Dubai Schokolade (1 kg)</strong>!`;
+      if (quizScrollBtn) quizScrollBtn.setAttribute('href', '#kapucino');
+    }
+  }
+
   quizOptionCards.forEach(card => {
-    card.addEventListener('click', () => {
-      quizOptionCards.forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-
-      const answer = card.getAttribute('data-answer');
-      if (quizResultBox) quizResultBox.style.display = 'block';
-
-      if (answer === 'beans') {
-        quizResultText.innerHTML = `Nejlépe se vám hodí <strong>Swisso Barista 100% Arabica</strong> nebo <strong>Swisso Crema</strong> — celá zrna pro odhalení maximálního bohatství čerstvé kávy!`;
-        if (quizScrollBtn) quizScrollBtn.setAttribute('href', '#zernova-kava');
-      } else if (answer === 'ground') {
-        quizResultText.innerHTML = `Vaše ideální volba je <strong>Swisso Mild Gemahlen (500 g)</strong>: dokonalé mletí pro moka konvičku nebo džezvu s jemnými květinově-medovými tóny.`;
-        if (quizScrollBtn) quizScrollBtn.setAttribute('href', '#melena-kava');
-      } else if (answer === 'instant') {
-        quizResultText.innerHTML = `Doporučujeme vyzkoušet <strong>Swisso Barista Gefriergetrocknet (200 g)</strong> nebo naše speciality <strong>Cappuccino Amaretto či Dubai Schokolade (1 kg)</strong>!`;
-        if (quizScrollBtn) quizScrollBtn.setAttribute('href', '#kapucino');
+    card.addEventListener('click', () => handleQuizSelect(card));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleQuizSelect(card);
       }
     });
   });
@@ -206,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // =========================================================================
-  // FAQ ACCORDION
+  // FAQ ACCORDION (with ARIA state synchronization)
   // =========================================================================
   const faqItems = document.querySelectorAll('.faq-item');
   faqItems.forEach(item => {
@@ -214,9 +228,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!btn) return;
     btn.addEventListener('click', () => {
       const isActive = item.classList.contains('active');
-      faqItems.forEach(i => i.classList.remove('active'));
+      faqItems.forEach(i => {
+        i.classList.remove('active');
+        const b = i.querySelector('.faq-question');
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
       if (!isActive) {
         item.classList.add('active');
+        btn.setAttribute('aria-expanded', 'true');
       }
     });
   });
